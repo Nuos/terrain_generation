@@ -2,7 +2,7 @@
 
 using namespace sf;
 
-enum TerrainType {forest, desert, plain};
+enum TerrainType {forest, desert, plain, tom};
 
 struct Chunk{
     TerrainType** terrain;
@@ -19,7 +19,7 @@ public:
 
     unsigned int getDir(unsigned int, unsigned int);
     unsigned int numNeighbours(unsigned int, unsigned int);
-    void swap(TerrainType*, TerrainType*);
+    void count();
     void loop();
     void input();
     void update();
