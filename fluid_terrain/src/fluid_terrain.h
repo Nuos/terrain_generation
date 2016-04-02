@@ -15,7 +15,6 @@ private:
     RenderWindow window;
     int height, width;
     double interaction_equal, interaction_unequal;
-    int temp;
 public:
     FluidTerrain(unsigned int);
 

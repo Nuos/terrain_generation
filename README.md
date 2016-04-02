@@ -4,6 +4,11 @@ Here I will put procedural terrain generation experiments
 
 ### Fluid inspired terrain generation
 
+#### 2016.04.02
+It seems to be working to some degree, however it should be forming phases faster to be an efficient way of making an interesting terrain. 
+
+![2016.04.02.gif](fluid_terrain/screenshot/2016.04.02.gif)
+
 #### 2016.04.01
 I have tried adding a potential function. I have also tested out some kind of simulated annealing, allowing the particles to moving longer distances at the start, then lowering the "temperature". It is not stable, but it is showing some forming of phases.
 
