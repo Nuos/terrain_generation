@@ -6,7 +6,7 @@ enum TerrainType {forest, desert, plain, tom};
 
 struct Chunk{
     TerrainType** terrain;
-    unsigned int chunkSize;
+    int chunkSize;
 };
 
 class FluidTerrain{

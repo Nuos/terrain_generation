@@ -15,7 +15,7 @@ FluidTerrain::FluidTerrain(unsigned int chunkSize){
     for (int i = 0; i < chunkSize; i++){
         chunk.terrain[i] = new TerrainType [chunkSize];
             for (int j = 0; j < chunkSize; j++)
-                chunk.terrain[i][j] = TerrainType(rand()%3);
+                chunk.terrain[i][j] = TerrainType(rand()%2);
     }
 
     // Initialize window
@@ -47,34 +47,64 @@ void FluidTerrain::input(){
 }
 
 double FluidTerrain::potential(unsigned int i, unsigned int j){
+    int a, b;
     double potential = 0;
-    for (int k = -10; k <= 10; k++){
-        for (int l = -10; l <= 10; l++){
-            if (k+i > 10 and k+i < chunk.chunkSize-10 and l+j > 10 and l+j < chunk.chunkSize-10){
-                if (chunk.terrain[i][j] == chunk.terrain[i+k][j+l])
-                    potential += interaction_equal;
-                else
-                    potential += interaction_unequal;
-            }
+    int chunkSize = chunk.chunkSize;
+    int range = 20;
+    for (int k = -range; k <= range; k++){
+        for (int l = -range; l <= range; l++){
+            a = k+i;
+            b = l+j; 
+            
+            // Periodic boundary 
+            if (a < 0)
+                a += chunkSize;
+            else if (a > chunkSize-1)
+                a -= chunkSize;
+            if (b < 0)
+                b += chunkSize;
+            else if (b > chunkSize-1)
+                b -= chunkSize;
+
+            if (chunk.terrain[i][j] == chunk.terrain[a][b])
+                potential += interaction_equal;
+            else
+                potential += interaction_unequal;
         }
     }
     return potential;
 }
 
 void FluidTerrain::update(){
-    unsigned int length_x, length_y, i, j;
-    unsigned int chunkSize = chunk.chunkSize;
-    unsigned int steps = 100000;
+    int new_i, new_j, i, j;
+    int chunkSize = chunk.chunkSize;
+    unsigned int steps = 10000;
     TerrainType terrain_tmp;
-    
+
+    int range = 10;
+
     for (int n = 0; n < steps; n++){
         i = rand()%chunkSize, j = rand()%chunkSize;
         
-        length_x = rand()%2-1;
-        length_y = rand()%2-1;
+        new_i = i + rand()%(range*2+1)-range;
+        new_j = j + rand()%(range*2+1)-range;
+       
+        //printf("i: %d\tj: %d\t", new_i, new_j);
+
+        // Periodic boundary 
+        if (new_i < 0)
+            new_i += chunkSize;
+        else if (new_i > chunkSize-1)
+            new_i -= chunkSize;
+        if (new_j < 0)
+            new_j += chunkSize;
+        else if (new_j > chunkSize-1)
+            new_j -= chunkSize;
+
+        //printf("new_i: %d\tnew_j: %d\n", new_i, new_j);
         
-        if (this->potential(i, j) < this->potential(i+length_x, j+length_y))
-            std::swap(chunk.terrain[i][j], chunk.terrain[i+length_x][j+length_y]);
+        if (this->potential(i, j) < this->potential(new_i, new_j))
+            std::swap(chunk.terrain[i][j], chunk.terrain[new_i][new_j]);
     }
 }
 
